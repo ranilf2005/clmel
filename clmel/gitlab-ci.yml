@@ -1,0 +1,33 @@
+stages:
+  - test
+  - deploy
+
+# -------- Stage 1: run pyATS tests --------
+pyats_tests:
+  stage: test
+  tags: ["pyats-fast"]                 # 🔧 must match your new fast runner's tag
+  image: "198.18.1.4:5050/root/pyatscml/pyats:1.0.0"   # 🔧 your pre-baked image
+  variables:
+    GIT_STRATEGY: fetch
+    GIT_DEPTH: "1"
+  script:
+    - echo "== pyATS version =="
+    - pyats version
+    - echo "== Running smoke job =="
+    - pyats run job jobs/smoke_job.py --testbed-file testbed/testbed.yaml --output logs/${CI_PIPELINE_ID}
+  artifacts:
+    when: always
+    expire_in: 7 days
+    paths:
+      - logs/
+
+# -------- Stage 2: only runs if tests passed --------
+deploy_loopback:
+  stage: deploy
+  tags: ["pyats-fast"]                 # run on the fast runner too
+  image: "198.18.1.4:5050/root/pyatscml/pyats:1.0.0"
+  needs: ["pyats_tests"]               # gate on test success
+  script:
+    - echo "All tests passed. Deploying loopbacks defined in configs/loopbacks.yaml ..."
+    - python jobs/configure_loopback.py --testbed testbed/testbed.yaml --config configs/loopbacks.yaml
+
