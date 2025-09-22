@@ -1,0 +1,11 @@
+devices:
+  iosv-1:
+    - name: Loopback300
+      ip: 2.2.2.2
+      mask: 255.255.255.255
+
+  csr1000v-0:
+    - name: Loopback300
+      ip: 2.2.2.2
+      mask: 255.255.255.255
+

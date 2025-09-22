@@ -1,0 +1,46 @@
+testbed:
+  name: ios_iosxe_testbed
+
+devices:
+  iosv-1:
+    os: ios
+    type: router
+    connections:
+      defaults:
+        class: unicon.Unicon
+      cli:
+        protocol: ssh
+        ip: 198.18.1.7
+        arguments:
+          ssh_options: >
+            -oKexAlgorithms=+diffie-hellman-group14-sha1
+            -oHostKeyAlgorithms=+ssh-rsa
+            -oPubkeyAcceptedKeyTypes=+ssh-rsa
+    credentials:
+      default:
+        username: admin
+        password: C1sco12345
+      enable:
+        password: C1sco12345
+        
+  csr1000v-0:
+    os: iosxe
+    type: router
+    connections:
+      defaults:
+        class: unicon.Unicon
+      cli:
+        protocol: ssh
+        ip: 198.18.1.6
+        arguments:
+          ssh_options: >
+            -oKexAlgorithms=+diffie-hellman-group14-sha1
+            -oHostKeyAlgorithms=+ssh-rsa
+            -oPubkeyAcceptedKeyTypes=+ssh-rsa
+    credentials:
+      default:
+        username: admin
+        password: C1sco12345
+      enable:
+        password: C1sco12345
+
